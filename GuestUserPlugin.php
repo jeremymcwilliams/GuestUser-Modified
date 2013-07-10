@@ -26,6 +26,19 @@ class GuestUserPlugin extends Omeka_Plugin_AbstractPlugin
         'public_show_admin_bar',
         'guest_user_widgets'       
     );
+	
+	/* JM:*/
+	public $users = array(
+	
+		'Level1',
+		'Level2',
+		'Level3',
+		'Level4',
+		'Level5'
+	
+	);
+	/* end JM:*/
+
 
     
     /**
@@ -94,14 +107,17 @@ class GuestUserPlugin extends Omeka_Plugin_AbstractPlugin
 		
 		/*JM - this gives 'guest' permission to view private items*/
 		$acl->allow('guest',array('Items'), 'showNotPublic');
-
-
-        $acl->addRole(new Zend_Acl_Role('level1'), null);
 		
-		/*JM - this gives 'guest' permission to view private items*/
-		$acl->allow('level1',array('Items'), 'showNotPublic');
+		foreach ($this->users as $user){
+			$acl->addRole(new Zend_Acl_Role($user), null);	
 
-
+			/*JM - this gives 'guest' permission to view private items*/
+			$acl->allow($user,array('Items'), 'showNotPublic');
+			
+		}
+		
+		/* end JM*/
+		
 
 		
     }
@@ -181,7 +197,9 @@ class GuestUserPlugin extends Omeka_Plugin_AbstractPlugin
         //Clobber the default admin link if user is guest
         $user = current_user();
         if($user) {
-            if($user->role == 'guest') {
+        	
+			/*orig: if($user->role == 'guest'){*/
+            if($user->role == 'guest' || in_array($user->role, $this->users)) {
                 unset($navLinks[1]);
             } 
             $navLinks[0]['id'] = 'admin-bar-welcome';
@@ -201,13 +219,15 @@ class GuestUserPlugin extends Omeka_Plugin_AbstractPlugin
                     'id' => 'guest-user-login',
                     'label' => $loginLabel,
                     'uri' => url('guest-user/user/login')
-                ),
-                
+                )
+                /* JM - commented out
                 'guest-user-register' => array(
                     'id' => 'guest-user-register', 
                     'label' => $registerLabel,
                     'uri' => url('guest-user/user/register'),
                     )
+				 
+				 */
                 
                 );
         return $navLinks;
