@@ -11,4 +11,30 @@ function guest_user_widget($widget)
     }
 }
 
+
+function jeremytest(){
+	
+	
+	$user = current_user();
+	$r= $user->role;
+	
+	switch($r){
+		
+		case "Level5":
+			level5();
+			break;
+		
+	}
+	
+	
+
+}
+
+function level5(){
+	
+	echo "<p>it's level 5!!</p>";
+	
+	
+}
+
 ?>
