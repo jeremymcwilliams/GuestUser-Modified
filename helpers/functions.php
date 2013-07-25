@@ -12,57 +12,38 @@ function guest_user_widget($widget)
 }
 
 
-function jeremytest(){
-	
-	
-	$user = current_user();
-	$r= $user->role;
-	//echo $r;
-	switch($r){
-		
-		case "Level5":
-			level5();
-			break;
-            
-            
-        case "super":
-        super();
-        break;     
-		
-	}
-	
-	
 
-}
 
-function watermark_image(){
+function watermark_image($file){
     
- /* from my testing...obviously needs work   */
-$file="cy_skating";
-$new=md5($file);
-$np=$new.".png";
-$stamp=imagecreatefromjpeg("http://library.lclark.edu/images/owllight_small.jpg");
-$im=imagecreatefromjpeg("cy_skating.jpg");
-
-
-// Set the margins for the stamp and get the height/width of the stamp image
-$marge_right = 15;
-$marge_bottom = 15;
-$sx = imagesx($stamp);
-$sy = imagesy($stamp);
-
-// Copy the stamp image onto our photo using the margin offsets and the photo 
-// width to calculate positioning of the stamp. 
-imagecopy($im, $stamp, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
-
-// Output and free memory
-//header('Content-type: image/png');
-$newim=imagepng($im, $np, 0);
-echo "<table width='80%'><tr><td><img src='cy_skating.jpg' width='100%'></td><td><img src='$np' width='100%'></td></tr></table>";
-
-
-
-imagedestroy($newim);   
+	$orig_path="/Library/WebServer/Documents/pubcomda/files/fullsize/$file";
+	 /* from my testing...obviously needs work   */
+	$file="cy_skating";
+	$new=md5($file);
+	$np="/Library/Webserver/Documents/pubcomda/files/watermark/".$new.".png";
+	$sp="/pubcomda/files/watermark/".$new.".png";
+	$stamp=imagecreatefrompng("/Library/WebServer/Documents/pubcomda/files/watermark.png");
+	$im=imagecreatefromjpeg($orig_path);
+	
+	
+	// Set the margins for the stamp and get the height/width of the stamp image
+	$marge_right = 0;
+	$marge_bottom = 30;
+	$sx = imagesx($stamp);
+	$sy = imagesy($stamp);
+	
+	// Copy the stamp image onto our photo using the margin offsets and the photo 
+	// width to calculate positioning of the stamp. 
+	imagecopy($im, $stamp, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
+	
+	// Output and free memory
+	//header('Content-type: image/png');
+	$newim=imagepng($im, $np, 0);
+	//echo "<table width='80%'><tr><td><img src='cy_skating.jpg' width='100%'></td><td><img src='$np' width='100%'></td></tr></table>";
+	echo "<img src='$sp' width='100%'>";
+	
+	echo $np;
+	imagedestroy($newim);   
     
     
     
