@@ -17,12 +17,13 @@ function guest_user_widget($widget)
 function watermark_image($file){
     
 	$orig_path="/Library/WebServer/Documents/pubcomda/files/fullsize/$file";
+   // $orig_path="/files/fullsize/$file";
 	 /* from my testing...obviously needs work   */
-	$file="cy_skating";
+
 	$new=md5($file);
 	$np="/Library/Webserver/Documents/pubcomda/files/watermark/".$new.".png";
 	$sp="/pubcomda/files/watermark/".$new.".png";
-	$stamp=imagecreatefrompng("/Library/WebServer/Documents/pubcomda/files/watermark.png");
+	$stamp=imagecreatefrompng("/Library/WebServer/Documents/pubcomda/files/pubcomdawatermark.png");
 	$im=imagecreatefromjpeg($orig_path);
 	
 	
@@ -31,18 +32,29 @@ function watermark_image($file){
 	$marge_bottom = 30;
 	$sx = imagesx($stamp);
 	$sy = imagesy($stamp);
+
+    $bigx=imagesx($im);
+    $bigy=imagesy($im);
+    
+    $cx=($bigx-$sx)/2;
+    $cy=($bigy-$sy)/2;
+    
+   // echo "bigx: $bigx, sx: $sx";
+    
+    //echo $cx;
 	
 	// Copy the stamp image onto our photo using the margin offsets and the photo 
 	// width to calculate positioning of the stamp. 
-	imagecopy($im, $stamp, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
-	
+	//imagecopy($im, $stamp, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
+	imagecopy($im, $stamp, $cx,$cy, 0, 0, imagesx($stamp), imagesy($stamp));
+    
 	// Output and free memory
 	//header('Content-type: image/png');
 	$newim=imagepng($im, $np, 0);
 	//echo "<table width='80%'><tr><td><img src='cy_skating.jpg' width='100%'></td><td><img src='$np' width='100%'></td></tr></table>";
 	echo "<img src='$sp' width='100%'>";
 	
-	echo $np;
+	//echo $np;
 	imagedestroy($newim);   
     
     

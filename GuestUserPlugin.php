@@ -114,7 +114,8 @@ class GuestUserPlugin extends Omeka_Plugin_AbstractPlugin
 			$acl->allow($user,array('Items'), 'showNotPublic');
 			
 		}
-		
+        /* allows Level1 users to edit item (i.e. keyword)*/
+		$acl->allow("Level1",array('Items'), 'edit');
 		/* end JM*/
 		
 
